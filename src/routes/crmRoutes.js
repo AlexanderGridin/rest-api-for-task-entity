@@ -1,12 +1,22 @@
+import {
+  addTask,
+  getTask,
+  getTasks,
+  updateTask,
+  removeTask,
+} from "../controllers/crmController";
+
 export const routes = (app) => {
   app
     .route("/tasks")
-    .get((_req, res) => res.send("GET request works"))
-    .post((_req, res) => res.send("POST request works"));
+    .get((req, _res, next) => {
+      console.log("Middleware example");
+      console.log(`Request from ${req.originalUrl}`);
+      console.log(`Request method ${req.method}`);
 
-  app
-    .route("/task/:id")
-    .get((_req, res) => res.send("GET task by id works"))
-    .put((_req, res) => res.send("PUT request works"))
-    .delete((_req, res) => res.send("DELETE request works"));
+      next();
+    }, getTasks)
+    .post(addTask);
+
+  app.route("/task/:id").get(getTask).put(updateTask).delete(removeTask);
 };
